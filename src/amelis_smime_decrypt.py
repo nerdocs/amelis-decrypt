@@ -98,14 +98,14 @@ def decrypt_smime(encrypted_data):
         try:
             p7, _data = SMIME.smime_load_pkcs7_bio(bio)
         except SMIME.SMIME_Error as e:
-            print(f"SMIME_Error occurred: {e}")
+            logger.error(f"SMIME_Error occurred: {e}")
             return None
 
         decrypted_bio = smime.decrypt(p7)
 
         return decrypted_bio
     except Exception as e:
-        print(f"❌ Decryption failed: {e}")
+        logger.error(f"❌ Decryption failed: {e}")
         return None
 
 
@@ -116,19 +116,19 @@ def process_smime_attachment_email(msg: EmailMessage) -> None:
         decoded_payload = part.get_payload(decode=True)  # .decode("iso8859")
 
         logger.debug(f"Attachment size: {len(decoded_payload)} bytes")
-        print(f"🔹 First 100 bytes of attachment: {decoded_payload[:100]}")
+        logger.debug(f"🔹 First 100 bytes of attachment: {decoded_payload[:100]}")
 
         decrypted_content = decrypt_smime(decoded_payload)
         if decrypted_content:
-            print("✅ Successfully decrypted attachment email:")
+            logger.info("✅ Successfully decrypted attachment email:")
             # TODO: save attachment to output directory
             # TODO: name output file after patient name
             # For example, save it or extract further attachments
         else:
-            print("❌ Attachment email decryption failed.")
+            logger.error("❌ Attachment email decryption failed.")
         return
 
-    print("❌ No valid S/MIME attachment found.")
+    logger.error("❌ No valid S/MIME attachment found.")
 
 
 def process_email(mail: imaplib.IMAP4_SSL, email_id: str) -> None:
@@ -136,7 +136,7 @@ def process_email(mail: imaplib.IMAP4_SSL, email_id: str) -> None:
 
     status, msg_data = mail.fetch(email_id, "(RFC822)")
     if status != "OK":
-        print(f"Failed to fetch email {email_id}")
+        logger.error(f"Failed to fetch email {email_id}")
         return
 
     raw_email: bytes = msg_data[0][1]  # noqa

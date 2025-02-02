@@ -14,9 +14,9 @@
 
 Easy.
 
-[//]: # (TODO: This is still necessary to be done.)
+TODO: This is still necessary to be done.
 ```bash
-pip install amelis-decrypt
+pip install amelis-smime-decrypt
 ```
 
 ## 📦 Installation for development

@@ -62,27 +62,6 @@ def load_smime_keys():
     return smime
 
 
-# def extract_smime_attachment(raw_email):
-#     """Extract the smime.p7m attachment from an email."""
-#     msg = BytesParser(policy=policy.default).parsebytes(raw_email)
-#
-#     for part in msg.walk():
-#         content_type = part.get_content_type()
-#         print(f"🔹 Content type: {content_type}")
-#         # # Some email clients use application/x-pkcs7-mime instead
-#         # if content_type in ["application/pkcs7-mime", "application/x-pkcs7-mime"]:
-#         #     print("🔹 Found S/MIME Encrypted Attachment (smime.p7m)")
-#         #     payload = part.get_payload(decode=True)  # Auto-decodes Base64
-#         #     return payload
-#
-#         content_disposition = part.get("Content-Disposition", "")
-#         if "attachment" in content_disposition and "smime.p7m" in content_disposition:
-#             logger.debug("🔹 Found S/MIME Encrypted Attachment: smime.p7m")
-#             return part.get_payload(decode=True)  # Auto-decodes Base64
-#
-#     print("❌ No S/MIME attachment found.")
-#     return None
-
 
 def decrypt_smime(encrypted_data):
     """Decrypt an S/MIME encrypted email using M2Crypto."""
@@ -166,7 +145,6 @@ def check_key_and_cert(private_key_path, certificate_path):
             logger.critical(f"Private key file '{private_key_path}' does not exist.")
             return False
         if not os.path.exists(  certificate_path):
-            print(os.getcwd())
             logger.critical(f"Certificate file '{certificate_path}' does not exist.")
             return False
 
@@ -210,7 +188,7 @@ def check_key_and_cert(private_key_path, certificate_path):
         return False
 
 
-def decrypt_smime_data(encrypted_data, private_key_path, certificate_path):
+def decrypt_smime_data(encrypted_data):
     """
     Decrypt S/MIME encrypted data.
 
@@ -221,10 +199,7 @@ def decrypt_smime_data(encrypted_data, private_key_path, certificate_path):
     """
     try:
         # Initialize SMIME object
-        smime = SMIME.SMIME()
-
-        # Load private key and certificate
-        smime.load_key(private_key_path, certificate_path)
+        smime = load_smime_keys()
 
         # Create a BIO buffer from the encrypted data
         in_bio = BIO.MemoryBuffer(encrypted_data)

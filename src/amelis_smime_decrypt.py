@@ -120,12 +120,9 @@ def process_email(mail: imaplib.IMAP4_SSL, email_id: str) -> None:
 
     raw_email: bytes = msg_data[0][1]  # noqa
     msg: EmailMessage = BytesParser(policy=policy.default).parsebytes(raw_email)
-    logger.info(f"Processing Mail: {msg['Subject']}")
+    print(f"Processing Mail: {msg['Subject']}")
     if msg.get_content_type() == "application/pkcs7-mime" and  msg.is_attachment():
-        # we know now that the whole mail is an attachment
-        process_smime_attachment_email(msg)  # , part.get_filename())
-
-    #     process_inline_encrypted_email(msg)
+        process_smime_attachment_email(msg)
 
     # DEBUG: restore "unseen" status
     mail.store(email_id, "-FLAGS", "\\Seen")

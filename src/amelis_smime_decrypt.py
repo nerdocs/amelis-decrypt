@@ -113,28 +113,20 @@ def process_smime_attachment_email(msg: EmailMessage) -> None:
     """Extract and decrypt S/MIME email attachment (smime.p7m)."""
 
     for part in msg.walk():
-        content_type = part.get_content_type()
-        content_disposition = str(part.get("Content-Disposition"))
+        decoded_payload = part.get_payload(decode=True)  # .decode("iso8859")
 
-        if (
-            content_type == "application/pkcs7-mime"
-            and "attachment" in content_disposition
-        ):
-            print("🔹 Found S/MIME Encrypted Attachment: smime.p7m")
-            decoded_payload = part.get_payload(decode=True)  # .decode("iso8859")
+        logger.debug(f"Attachment size: {len(decoded_payload)} bytes")
+        print(f"🔹 First 100 bytes of attachment: {decoded_payload[:100]}")
 
-            logger.debug(f"Attachment size: {len(decoded_payload)} bytes")
-            print(f"🔹 First 100 bytes of attachment: {decoded_payload[:100]}")
-
-            decrypted_content = decrypt_smime(decoded_payload)
-            if decrypted_content:
-                print("✅ Successfully decrypted attachment email:")
-                # TODO: save attachment to output directory
-                # TODO: name output file after patient name
-                # For example, save it or extract further attachments
-            else:
-                print("❌ Attachment email decryption failed.")
-            return
+        decrypted_content = decrypt_smime(decoded_payload)
+        if decrypted_content:
+            print("✅ Successfully decrypted attachment email:")
+            # TODO: save attachment to output directory
+            # TODO: name output file after patient name
+            # For example, save it or extract further attachments
+        else:
+            print("❌ Attachment email decryption failed.")
+        return
 
     print("❌ No valid S/MIME attachment found.")
 
@@ -149,16 +141,10 @@ def process_email(mail: imaplib.IMAP4_SSL, email_id: str) -> None:
 
     raw_email: bytes = msg_data[0][1]  # noqa
     msg: EmailMessage = BytesParser(policy=policy.default).parsebytes(raw_email)
-
     logger.info(f"Processing Mail: {msg['Subject']}")
-    for part in msg.walk():
-        # if part.get_content_type() == "application/pkcs7-mime":
-        header = part.get("Content-Disposition")
-        if header and header.startswith("attachment"):
-
-            # we know now that the whole mail is an attachment
-            process_smime_attachment_email(msg)  # , part.get_filename())
-            break
+    if msg.get_content_type() == "application/pkcs7-mime" and  msg.is_attachment():
+        # we know now that the whole mail is an attachment
+        process_smime_attachment_email(msg)  # , part.get_filename())
 
     #     process_inline_encrypted_email(msg)
 
@@ -176,8 +162,12 @@ def check_key_and_cert(private_key_path, certificate_path):
     """
     try:
         # Check if files exist
-        if not os.path.exists(private_key_path) or not os.path.exists(certificate_path):
-            logger.critical("Private key or certificate file does not exist.")
+        if not os.path.exists(private_key_path):
+            logger.critical(f"Private key file '{private_key_path}' does not exist.")
+            return False
+        if not os.path.exists(  certificate_path):
+            print(os.getcwd())
+            logger.critical(f"Certificate file '{certificate_path}' does not exist.")
             return False
 
         # Load private key

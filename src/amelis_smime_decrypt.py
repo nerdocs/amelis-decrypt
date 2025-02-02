@@ -62,7 +62,6 @@ def load_smime_keys():
     return smime
 
 
-
 def decrypt_smime(encrypted_data):
     """Decrypt an S/MIME encrypted email using M2Crypto."""
     try:
@@ -121,14 +120,14 @@ def process_email(mail: imaplib.IMAP4_SSL, email_id: str) -> None:
     raw_email: bytes = msg_data[0][1]  # noqa
     msg: EmailMessage = BytesParser(policy=policy.default).parsebytes(raw_email)
     print(f"Processing Mail: {msg['Subject']}")
-    if msg.get_content_type() == "application/pkcs7-mime" and  msg.is_attachment():
+    if msg.get_content_type() == "application/pkcs7-mime" and msg.is_attachment():
         process_smime_attachment_email(msg)
 
     # DEBUG: restore "unseen" status
     mail.store(email_id, "-FLAGS", "\\Seen")
 
 
-def check_key_and_cert(private_key_path, certificate_path):
+def check_key_and_cert(private_key_path, certificate_path) -> bool:
     """
     Check if the private key and certificate are valid and match.
 
@@ -141,7 +140,7 @@ def check_key_and_cert(private_key_path, certificate_path):
         if not os.path.exists(private_key_path):
             logger.critical(f"Private key file '{private_key_path}' does not exist.")
             return False
-        if not os.path.exists(  certificate_path):
+        if not os.path.exists(certificate_path):
             logger.critical(f"Certificate file '{certificate_path}' does not exist.")
             return False
 
@@ -185,13 +184,11 @@ def check_key_and_cert(private_key_path, certificate_path):
         return False
 
 
-def decrypt_smime_data(encrypted_data):
+def decrypt_smime_data(encrypted_data) -> bytes | None:
     """
     Decrypt S/MIME encrypted data.
 
     :param encrypted_data: Bytes object containing the S/MIME encrypted data
-    :param private_key_path: Path to the private key file
-    :param certificate_path: Path to the certificate file
     :return: Decrypted data as bytes, or None if decryption fails
     """
     try:

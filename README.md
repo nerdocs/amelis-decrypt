@@ -5,9 +5,9 @@
 ## 🚀 Features
 
 ✔️ Connects to an IMAP email server<br>
-✔️ Fetches unread emails<br>
+✔️ Fetches emails with given text in Subject<br>
 ✔️ Detects and decrypts S/MIME encrypted emails<br>
-✔️ Extracts PDF attachments and saves them<br>
+✔️ Extracts PDF attachments and saves them<br> (TODO)
 ✔️ Secure handling of private keys & credentials<br>
 
 ## 📦 Installation for usage

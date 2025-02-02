@@ -15,7 +15,7 @@ logger = logging.getLogger(__file__)
 
 # Email credentials and server details
 IMAP_SERVER = os.getenv("IMAP_SERVER")
-IMAP_PORT = 993
+IMAP_PORT = os.getenv("IMAP_PORT", 993)
 EMAIL_ACCOUNT = os.getenv("EMAIL_ACCOUNT")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
@@ -232,7 +232,7 @@ def main():
     if not mail:
         return
 
-    email_ids = fetch_unread_mails(mail, "Auftrag")
+    email_ids = fetch_unread_mails(mail, os.getenv("SUBJECT_KEYWORD", "Auftrag"))
     if not email_ids:
         logger.info("No emails found.")
         return

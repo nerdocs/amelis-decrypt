@@ -28,6 +28,8 @@ dev = [
 #    "pytest-cov",
 ]
 
+[project.scripts]
+amelis-smime-decrypt = "amelis_smime_decrypt:main"
 
 [project.urls]
 Homepage = "https://github.com/nerdocs/amelis-decrypt"

@@ -129,7 +129,8 @@ def process_smime_attachment_email(msg: EmailMessage) -> None:
             decrypted_content = decrypt_smime(decoded_payload)
             if decrypted_content:
                 print("✅ Successfully decrypted attachment email:")
-                # Process the decrypted content here
+                # TODO: save attachment to output directory
+                # TODO: name output file after patient name
                 # For example, save it or extract further attachments
             else:
                 print("❌ Attachment email decryption failed.")

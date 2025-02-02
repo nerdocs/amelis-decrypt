@@ -116,4 +116,4 @@ Pull requests are welcome! Feel free to fork and submit PRs.
 
 ## 📧 Support
 
-For issues, please open a [GitHub Issue](https://github.com/nerdocs/amelis-smime-decrypt.git/issues).
+For issues, please open a [GitHub Issue](https://github.com/nerdocs/amelis-smime-decrypt/issues).

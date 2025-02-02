@@ -32,6 +32,6 @@ dev = [
 amelis-smime-decrypt = "amelis_smime_decrypt:main"
 
 [project.urls]
-Homepage = "https://github.com/nerdocs/amelis-decrypt"
-Repository = "https://github.com/nerdocs/amelis-decrypt"
-Issues = "https://github.com/nerdocs/amelis-decrypt/issues"
+Homepage = "https://github.com/nerdocs/amelis-smime-decrypt"
+Repository = "https://github.com/nerdocs/amelis-smime-decrypt"
+Issues = "https://github.com/nerdocs/amelis-smime-decrypt/issues"

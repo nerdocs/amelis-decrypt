@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "amelis-decrypt"
+name = "amelis-smime-decrypt"
 version = "0.1.0"
 description = "A script to fetch and decrypt S/MIME encrypted emails and extract PDF attachments."
 authors = [

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "amelis-decrypt"
+version = "0.1.0"
+description = "A script to fetch and decrypt S/MIME encrypted emails and extract PDF attachments."
+authors = [
+    { name = "Christian Gonzalez", email = "office@nerdocs.at" }
+]
+license = { text = "GPL-3.0-or-later" }
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["email", "smime", "decryption", "imap", "attachments"]
+
+dependencies = [
+    "imapclient",
+    "M2Crypto",
+    "six",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+#    "pytest",
+#    "pytest-cov",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/nerdocs/amelis-decrypt"
+Repository = "https://github.com/nerdocs/amelis-decrypt"
+Issues = "https://github.com/nerdocs/amelis-decrypt/issues"
